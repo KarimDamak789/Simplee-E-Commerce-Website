@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Catalogue — Types d'objets</title>
+
+  <!-- Schema.org JSON-LD basique (SEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Store",
+    "name": "Mon E-commerce",
+    "description": "Boutique en ligne - différents types d'objets",
+    "url": "https://example.com"
+  }
+  </script>
+
+  <style>
+    :root{
+      --bg:#f6f7fb; --card:#ffffff; --accent:#2b6cb0; --muted:#6b7280;
+      --radius:12px; --shadow: 0 6px 18px rgba(16,24,40,0.06);
+      font-family: Inter, system-ui, Arial, sans-serif;
+    }
+    body{margin:0;background:var(--bg);color:#0f172a;padding:28px;}
+    .container{max-width:1200px;margin:0 auto;}
+    header{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;margin-bottom:18px}
+    header h1{font-size:20px;margin:0}
+    .controls{display:flex;gap:10px;align-items:center}
+    .search{
+      display:flex;align-items:center;background:var(--card);padding:8px;border-radius:10px;box-shadow:var(--shadow);
+    }
+    .search input{border:0;outline:0;padding:8px 10px;width:240px;font-size:14px;background:transparent}
+    .categories{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+    .cat-btn{
+      background:transparent;border:1px solid transparent;padding:8px 12px;border-radius:999px;cursor:pointer;
+      font-size:13px;
+    }
+    .cat-btn.active{background:var(--accent);color:#fff;border-color:rgba(255,255,255,0.06)}
+    .layout{display:grid;grid-template-columns:260px 1fr;gap:18px}
+    /* Sidebar simple */
+    .sidebar{background:var(--card);padding:12px;border-radius:var(--radius);box-shadow:var(--shadow)}
+    .sidebar h3{margin:0 0 8px 0;font-size:14px}
+    .checkbox{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+    /* Product grid */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+    .card{background:var(--card);padding:12px;border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px}
+    .card .thumb{height:140px;border-radius:8px;background:linear-gradient(135deg,#e6eefc,#f7fbff);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--muted)}
+    .card h4{margin:0;font-size:15px}
+    .meta{font-size:13px;color:var(--muted)}
+    .tags{display:flex;gap:8px;flex-wrap:wrap}
+    .tag{font-size:12px;padding:4px 8px;border-radius:999px;background:#eef2ff;color:#4338ca}
+    /* Responsive */
+    @media (max-width:900px){
+      .layout{grid-template-columns:1fr; }
+      .search input{width:140px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Mon catalogue — types d'objets</h1>
+      <div class="controls">
+        <div class="search" aria-label="Recherche">
+          <input id="searchInput" type="search" placeholder="Rechercher un produit ou un type..." />
+        </div>
+        <button id="resetBtn" class="cat-btn" title="Tout afficher">Réinitialiser</button>
+      </div>
+    </header>
+
+    <!-- Boutons de catégories rapides -->
+    <div class="categories" id="categoryButtons">
+      <button class="cat-btn active" data-type="all">Tous</button>
+      <button class="cat-btn" data-type="electronique">Électronique</button>
+      <button class="cat-btn" data-type="vetements">Vêtements</button>
+      <button class="cat-btn" data-type="maison">Maison</button>
+      <button class="cat-btn" data-type="sport">Sport</button>
+      <button class="cat-btn" data-type="jouets">Jouets</button>
+    </div>
+
+    <div class="layout">
+      <!-- Sidebar: types + filtres -->
+      <aside class="sidebar" aria-labelledby="typesTitle">
+        <h3 id="typesTitle">Types / Filtres</h3>
+
+        <div class="checkbox">
+          <input type="checkbox" id="inStock" checked />
+          <label for="inStock">En stock seulement</label>
+        </div>
+
+        <div style="height:10px"></div>
+
+        <h3>Types disponibles</h3>
+        <div id="typesList" style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
+          <!-- JS remplit ceci dynamiquement si besoin -->
+          <label><input type="checkbox" class="type-filter" value="electronique" checked /> Électronique</label>
+          <label><input type="checkbox" class="type-filter" value="vetements" checked /> Vêtements</label>
+          <label><input type="checkbox" class="type-filter" value="maison" checked /> Maison</label>
+          <label><input type="checkbox" class="type-filter" value="sport" checked /> Sport</label>
+          <label><input type="checkbox" class="type-filter" value="jouets" checked /> Jouets</label>
+        </div>
+      </aside>
+
+      <!-- Grille de produits -->
+      <main>
+        <div id="productsGrid" class="grid" aria-live="polite">
+          <!-- Exemple de cartes produits (ajoute/modifie selon ton catalogue) -->
+          <article class="card" data-name="Casque Bluetooth X10" data-type="electronique" data-stock="true">
+            <div class="thumb">IMG</div>
+            <h4>Casque Bluetooth X10</h4>
+            <div class="meta">Type: Électronique — Prix: 59,99 €</div>
+            <div class="tags"><span class="tag">Électronique</span><span class="tag">Audio</span></div>
+          </article>
+
+          <article class="card" data-name="T-shirt Tech" data-type="vetements" data-stock="true">
+            <div class="thumb">IMG</div>
+            <h4>T-shirt Tech</h4>
+            <div class="meta">Type: Vêtements — Prix: 19,99 €</div>
+            <div class="tags"><span class="tag">Mode</span></div>
+          </article>
+
+          <article class="card" data-name="Lampe de Chevet" data-type="maison" data-stock="false">
+            <div class="thumb">IMG</div>
+            <h4>Lampe de Chevet</h4>
+            <div class="meta">Type: Maison — Prix: 24,90 €</div>
+            <div class="tags"><span class="tag">Décoration</span></div>
+          </article>
+
+          <article class="card" data-name="Ballon de Foot PRO" data-type="sport" data-stock="true">
+            <div class="thumb">IMG</div>
+            <h4>Ballon de Foot PRO</h4>
+            <div class="meta">Type: Sport — Prix: 29,90 €</div>
+            <div class="tags"><span class="tag">Sport</span></div>
+          </article>
+
+          <article class="card" data-name="Puzzle 1000 pcs" data-type="jouets" data-stock="true">
+            <div class="thumb">IMG</div>
+            <h4>Puzzle 1000 pcs</h4>
+            <div class="meta">Type: Jouets — Prix: 14,50 €</div>
+            <div class="tags"><span class="tag">Jouets</span><span class="tag">Famille</span></div>
+          </article>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // --- Logique de filtrage simple ---
+    const productsGrid = document.getElementById('productsGrid');
+    const productCards = Array.from(productsGrid.querySelectorAll('.card'));
+    const categoryButtons = document.querySelectorAll('#categoryButtons .cat-btn');
+    const searchInput = document.getElementById('searchInput');
+    const resetBtn = document.getElementById('resetBtn');
+    const typeFilters = Array.from(document.querySelectorAll('.type-filter'));
+    const inStockCheckbox = document.getElementById('inStock');
+
+    function normalize(str){
+      return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"");
+    }
+
+    function applyFilters(selectedCategory = 'all'){
+      const query = normalize(searchInput.value.trim());
+      const selectedTypes = typeFilters.filter(c=>c.checked).map(c=>c.value);
+      const onlyInStock = inStockCheckbox.checked;
+
+      productCards.forEach(card => {
+        const name = normalize(card.dataset.name || '');
+        const type = card.dataset.type || '';
+        const stock = card.dataset.stock === 'true';
+
+        // category button quick filter
+        const okCategory = (selectedCategory === 'all') ? true : (type === selectedCategory);
+        // types in sidebar checkboxes
+        const okType = selectedTypes.includes(type);
+        // search text matches name/type/tags
+        const tagsText = normalize(Array.from(card.querySelectorAll('.tag')).map(t=>t.textContent).join(' '));
+        const okSearch = query === '' || name.includes(query) || normalize(type).includes(query) || tagsText.includes(query);
+        const okStock = (!onlyInStock) || stock;
+
+        if (okCategory && okType && okSearch && okStock) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Category buttons
+    categoryButtons.forEach(btn=>{
+      btn.addEventListener('click', () => {
+        categoryButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const typ = btn.dataset.type || 'all';
+        applyFilters(typ);
+      });
+    });
+
+    // search input
+    searchInput.addEventListener('input', ()=> {
+      const activeBtn = document.querySelector('#categoryButtons .cat-btn.active');
+      const typ = activeBtn ? activeBtn.dataset.type : 'all';
+      applyFilters(typ);
+    });
+
+    // sidebar filters
+    typeFilters.forEach(cb => cb.addEventListener('change', ()=> {
+      const activeBtn = document.querySelector('#categoryButtons .cat-btn.active');
+      const typ = activeBtn ? activeBtn.dataset.type : 'all';
+      applyFilters(typ);
+    }));
+    inStockCheckbox.addEventListener('change', ()=> {
+      const activeBtn = document.querySelector('#categoryButtons .cat-btn.active');
+      const typ = activeBtn ? activeBtn.dataset.type : 'all';
+      applyFilters(typ);
+    });
+
+    // Reset button: clear search and show all
+    resetBtn.addEventListener('click', ()=>{
+      searchInput.value = '';
+      document.querySelectorAll('#categoryButtons .cat-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelector('#categoryButtons .cat-btn[data-type="all"]').classList.add('active');
+      typeFilters.forEach(cb=>cb.checked = true);
+      inStockCheckbox.checked = true;
+      applyFilters('all');
+    });
+
+    // initial apply
+    applyFilters('all');
+
+    // --- Exemple: comment ajouter dynamiquement un produit depuis JS
+    // function addProduct(obj){ ... }  // tu peux étendre pour ajouter via API
+  </script>
+</body>
+</html>
